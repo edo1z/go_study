@@ -4,14 +4,14 @@ import (
 	"fmt"
 )
 
-func split(sum int) (x, y int) {
-	x = sum * 4 / 9
-	y = sum - x
-	//naked return
-	return
+var c, python, php bool
+
+func hoge() {
+	c = true
 }
 
 func main() {
-	fmt.Println("Named return values")
-	fmt.Println(split(10))
+	var i int
+	hoge()
+	fmt.Println(i, c, python, php)
 }
