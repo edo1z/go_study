@@ -5,7 +5,11 @@ import (
 )
 
 func main() {
-	defer fmt.Println(". Thank you.")
-	defer fmt.Print(" world")
-	fmt.Print("Hello")
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done.")
 }
