@@ -4,15 +4,13 @@ import (
 	"fmt"
 )
 
+type Vertex struct {
+	X int
+	Y int
+}
+
 func main() {
-	i, j := 42, 10
-
-	p := &i
-	fmt.Println(*p)
-	*p = i / 2
-	fmt.Println(i)
-
-	p = &j
-	*p = *p / 2
-	fmt.Println(j)
+	v := Vertex{12, 34}
+	v.X = 40
+	fmt.Println(v)
 }
