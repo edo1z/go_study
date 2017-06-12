@@ -1,13 +1,20 @@
 package main
 
-import (
-	"fmt"
-)
+import "golang.org/x/tour/pic"
 
-var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+func Pic(dx, dy int) [][]uint8 {
+	image := make([][]uint8, dy)
+	for y := range image {
+		image[y] = make([]uint8, dx)
+	}
+	for y := 0; y < dy; y++ {
+		for x := 0; x < dx; x++ {
+			image[y][x] = uint8((x + y) / 2)
+		}
+	}
+	return image
+}
 
 func main() {
-	for i, v := range pow {
-		fmt.Printf("2**%d = %d\n", i, v)
-	}
+	pic.Show(Pic)
 }
