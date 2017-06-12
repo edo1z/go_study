@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 func main() {
-	var x, y int = 3, 4
-	var f float64 = math.Sqrt(float64(x*x + y*y))
-	var z uint = uint(f)
-	fmt.Println(x, y, z, f)
+	a := "string..."
+	b := 29
+	c := 0.54
+	d := uint32(b)
+
+	fmt.Printf("a is of type %T\n", a)
+	fmt.Printf("b is of type %T\n", b)
+	fmt.Printf("c is of type %T\n", c)
+	fmt.Printf("d is of type %T\n", d)
 }
