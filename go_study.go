@@ -4,17 +4,18 @@ import (
 	"fmt"
 )
 
-type Vertex struct {
-	Lat, Long float64
-}
-
-var m = map[string]Vertex{
-	"Bell Labs": {123.123, -234.234},
-	"Google":    {555.555, -122.122},
-}
-
 func main() {
-	for i, v := range m {
-		fmt.Printf("%s => %f\n", i, v)
-	}
+	m := make(map[string]int)
+
+	m["Answer"] = 42
+	fmt.Println("The value:", m["Answer"])
+
+	m["Answer"] = 48
+	fmt.Println("The value:", m["Answer"])
+
+	delete(m, "Answer")
+	fmt.Println("The value:", m["Answer"])
+
+	v, ok := m["Answer"]
+	fmt.Println("The value:", v, "Present?", ok)
 }
