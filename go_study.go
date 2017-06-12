@@ -4,14 +4,15 @@ import (
 	"fmt"
 )
 
-func main() {
-	a := "string..."
-	b := 29
-	c := 0.54
-	d := uint32(b)
+const Pi = 3.14
 
-	fmt.Printf("a is of type %T\n", a)
-	fmt.Printf("b is of type %T\n", b)
-	fmt.Printf("c is of type %T\n", c)
-	fmt.Printf("d is of type %T\n", d)
+func main() {
+	const World = "World"
+	fmt.Println("Hello", World)
+	fmt.Println("Happy", Pi, "Day")
+
+	const Truth = true
+	fmt.Println("Go rules?", Truth)
+
+	fmt.Printf("Pi + 10 = %f", Pi+10)
 }
