@@ -11,6 +11,7 @@ type Vertex struct {
 
 func main() {
 	v := Vertex{12, 34}
-	v.X = 40
+	p := &v
+	p.X = 1e9
 	fmt.Println(v)
 }
