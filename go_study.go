@@ -9,12 +9,8 @@ type Vertex struct {
 }
 
 var m = map[string]Vertex{
-	"Bell Labs": Vertex{
-		123.123, -234.234,
-	},
-	"Google": Vertex{
-		555.555, -122.122,
-	},
+	"Bell Labs": {123.123, -234.234},
+	"Google":    {555.555, -122.122},
 }
 
 func main() {
