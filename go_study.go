@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
-func main() {
-	sum := 1
-	for sum < 1000 {
-		sum += sum
+func sqrt(x float64) string {
+	if x < 0 {
+		return sqrt(-x) + "i"
 	}
-	fmt.Println(sum)
+	return fmt.Sprint(math.Sqrt(x))
+}
+
+func main() {
+	fmt.Println(sqrt(2), sqrt(-4))
 }
