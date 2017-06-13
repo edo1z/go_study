@@ -2,20 +2,28 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
-type IPAddr [4]byte
+type MyError struct {
+	When time.Time
+	What string
+}
 
-func (i IPAddr) String() string {
-	return fmt.Sprintf("%d.%d.%d.%d", i[0], i[1], i[2], i[3])
+func (e *MyError) Error() string {
+	return fmt.Sprintf("at %v, %s",
+		e.When, e.What)
+}
+
+func run() error {
+	return &MyError{
+		time.Now(),
+		"it didn't work",
+	}
 }
 
 func main() {
-	hosts := map[string]IPAddr{
-		"loopback":  {127, 0, 0, 1},
-		"googleDNS": {8, 8, 8, 8},
-	}
-	for name, ip := range hosts {
-		fmt.Printf("%s: %s\n", name, ip)
+	if err := run(); err != nil {
+		fmt.Println(err)
 	}
 }
