@@ -1,22 +1,38 @@
 package main
 
 import (
-	"log"
-	"os"
+	"fmt"
 )
 
 func main() {
-	err := os.MkdirAll("data/hoge", 0755)
-	if err != nil {
-		log.Fatal("mkdir error")
-	}
+	a := 1
+	b := "hoge"
+	c := []int{1, 2, 3}
+	d := b
 
-	defer os.RemoveAll("data/hoge")
+	fmt.Println(&a)
+	fmt.Printf("%p\n", &a)
+	fmt.Println(*&a)
+	fmt.Println()
 
-	f, err := os.Create("data/hoge/hoge.txt")
-	if err != nil {
-		log.Fatal("create file error")
-	}
+	fmt.Println(b)
+	fmt.Println(&b)
+	fmt.Println(&d)
+	fmt.Println()
 
-	defer f.Close()
+	fmt.Println(c)
+
+	hoge(&a)
+	hoge(&a)
+	hoge(&c[2])
+}
+
+func hoge(i *int) {
+	fmt.Println("\nhoge start")
+	fmt.Printf("%T\n", i)
+	fmt.Println(*i)
+	fmt.Println(i)
+	fmt.Println(&i)
+	*i++
+	fmt.Println("hoge end\n")
 }
