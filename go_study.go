@@ -1,23 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"log"
+	"os"
 )
 
 func main() {
-	tick := time.Tick(100 * time.Millisecond)
-	boom := time.After(500 * time.Millisecond)
-	for {
-		select {
-		case <-tick:
-			fmt.Println("tick.")
-		case <-boom:
-			fmt.Println("BOOM!")
-			return
-		default:
-			fmt.Println("    .")
-			time.Sleep(50 * time.Millisecond)
-		}
+	err := os.MkdirAll("data/hoge", 0755)
+	if err != nil {
+		log.Fatal("mkdir error")
 	}
+
+	defer os.RemoveAll("data/hoge")
+
+	f, err := os.Create("data/hoge/hoge.txt")
+	if err != nil {
+		log.Fatal("create file error")
+	}
+
+	defer f.Close()
 }
