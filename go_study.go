@@ -1,38 +1,38 @@
 package main
 
 import (
-	"fmt"
+	"github.com/nfnt/resize"
+	"image/jpeg"
+	"io"
+	"log"
+	"os"
 )
 
 func main() {
-	a := 1
-	b := "hoge"
-	c := []int{1, 2, 3}
-	d := b
+	f, err := os.Open("./data/hoge.jpg")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	fmt.Println(&a)
-	fmt.Printf("%p\n", &a)
-	fmt.Println(*&a)
-	fmt.Println()
+	img, err := jpeg.Decode(f)
+	chkErr(err)
+	_ = f.Close()
 
-	fmt.Println(b)
-	fmt.Println(&b)
-	fmt.Println(&d)
-	fmt.Println()
+	thumb := resize.Thumbnail(300, 300, img, resize.Lanczos3)
 
-	fmt.Println(c)
-
-	hoge(&a)
-	hoge(&a)
-	hoge(&c[2])
+	out, err := os.Create("./data/thumb.jpg")
+	chkErr(err)
+	defer Close(out)
+	err = jpeg.Encode(out, thumb, nil)
+	chkErr(err)
 }
 
-func hoge(i *int) {
-	fmt.Println("\nhoge start")
-	fmt.Printf("%T\n", i)
-	fmt.Println(*i)
-	fmt.Println(i)
-	fmt.Println(&i)
-	*i++
-	fmt.Println("hoge end\n")
+func Close(c io.Closer) {
+	_ = c.Close()
+}
+
+func chkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
