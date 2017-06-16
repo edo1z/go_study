@@ -10,10 +10,7 @@ import (
 
 func main() {
 	f, err := os.Open("./data/hoge.jpg")
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	chkErr(err)
 	img, err := jpeg.Decode(f)
 	chkErr(err)
 	_ = f.Close()
