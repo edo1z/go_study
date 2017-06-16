@@ -2,17 +2,21 @@ package main
 
 import (
 	"fmt"
-	"github.com/jasonlvhit/gocron"
+	"os"
+	"strings"
 )
 
-func task(a, b int) {
-	fmt.Println("I am running task.")
-	fmt.Printf("%d + %d = %d", a, b, a+b)
+func main() {
+	target := "./data/"
+	chkTargetDir(target)
 }
 
-func main() {
-	gocron.Clear()
-	s := gocron.NewScheduler()
-	s.Every(1).Minute().Do(task, 10, 5)
-	s.Start()
+func chkTargetDir(target string) {
+	info, err := os.Stat(target)
+	if err != nil {
+		fmt.Println("target is invalid.")
+	} else if !info.IsDir() {
+		fmt.Println("target is not a valid directory")
+	}
+	println(strings.TrimSuffix(target, "/"))
 }
