@@ -2,21 +2,25 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strings"
+	"gopkg.in/cheggaaa/pb.v2"
+	"time"
 )
 
 func main() {
-	target := "./data/"
-	chkTargetDir(target)
-}
+	fmt.Println("test progress bar")
+	file_size := int64(1024)
+	now_size := int64(0)
+	bar := pb.Start64(file_size)
 
-func chkTargetDir(target string) {
-	info, err := os.Stat(target)
-	if err != nil {
-		fmt.Println("target is invalid.")
-	} else if !info.IsDir() {
-		fmt.Println("target is not a valid directory")
+	for {
+		now_size += 50
+		if now_size < file_size {
+			bar.SetCurrent(now_size)
+		} else {
+			bar.SetCurrent(file_size)
+			bar.Finish()
+			break
+		}
+		time.Sleep(100 * time.Millisecond)
 	}
-	println(strings.TrimSuffix(target, "/"))
 }
