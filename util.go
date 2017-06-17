@@ -18,28 +18,22 @@ func GetFilePath(d, f string) string {
 	return filepath.Join(d, f)
 }
 
-func ProgressBar(t *Target, file_path *string, ch <-chan string){
+func ProgressBar(t *Target, file_path *string, ch chan int){
 	file_size := t.file_size
 	now_size := int64(0)
 	bar := pb.Start64(file_size)
 	for {
-		select {
-		case <-ch:
+		fi, err := os.Stat(*file_path)
+		chkErr(err)
+		now_size = fi.Size()
+		if now_size < file_size {
+			bar.SetCurrent(now_size)
+		} else {
 			bar.SetCurrent(file_size)
 			bar.Finish()
+			ch <- 1
 			break
-		default:
-			fi, err := os.Stat(*file_path)
-			chkErr(err)
-			now_size = fi.Size()
-			if now_size < file_size {
-				bar.SetCurrent(now_size)
-			} else {
-				bar.SetCurrent(file_size)
-				bar.Finish()
-				break
-			}
-			time.Sleep(100 * time.Millisecond)
 		}
+		time.Sleep(100 * time.Millisecond)
 	}
 }

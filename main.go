@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"log"
-	"golang.org/x/net/context/ctxhttp"
-	"context"
-	"time"
 	"os"
 	"io"
 )
@@ -33,8 +30,7 @@ func main() {
 
 func check(t *Target) {
 	fmt.Println("checking url...")
-	ctx, _ := context.WithTimeout(context.Background(), time.Duration(10)*time.Second)
-	res, err := ctxhttp.Head(ctx, http.DefaultClient, t.url)
+	res, err := http.Head(t.url)
 	chkErr(err)
 	if res.Header.Get("Accept-Ranges") != "bytes" {
 		log.Fatal("not supported range access.")
@@ -60,10 +56,10 @@ func download(t *Target){
 	out, err := os.Create(out_path)
 	chkErr(err)
 	defer out.Close()
-	ch := make(chan string)
+	ch := make(chan int)
 	go ProgressBar(t, &out_path, ch)
 	io.Copy(out, res.Body)
-	ch <- "fin"
+	<- ch
 }
 
 func chkErr(err error){
