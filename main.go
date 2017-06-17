@@ -1,69 +1,37 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"net/http"
-	"log"
-	"os"
+	"github.com/wcharczuk/go-chart"
 	"io"
+	"os"
 )
 
-var target_url = "https://www.imagemagick.org/download/linux/CentOS/x86_64/ImageMagick-7.0.6-0.x86_64.rpm"
-var out_dir = "."
-
-type Target struct {
-	url string
-	dir_path string
-	file_name string
-	file_size int64
-}
-
 func main() {
-	fmt.Println("test file download")
-	target := Target{
-		url: target_url,
-		dir_path: out_dir,
+	var x []float64
+	var y []float64
+	for i := 0.0; i < 100; i++ {
+		x = append(x, i-50.0)
+		y = append(y, (i-50.0)*(i-50.0))
 	}
-	check(&target)
-	download(&target)
-}
-
-func check(t *Target) {
-	fmt.Println("checking url...")
-	res, err := http.Head(t.url)
-	chkErr(err)
-	if res.Header.Get("Accept-Ranges") != "bytes" {
-		log.Fatal("not supported range access.")
+	graph := chart.Chart{
+		Series: []chart.Series{
+			chart.ContinuousSeries{
+				XValues: x,
+				YValues: y,
+			},
+		},
 	}
-	if res.ContentLength <= 0 {
-		log.Fatal("invalid content length.")
-	}
-	t.file_size = int64(res.ContentLength)
-	t.file_name = GetFileName(t.url)
-	fmt.Println("check ok.")
-}
-
-func download(t *Target){
-	fmt.Println("downloading...")
-	req, err := http.NewRequest("GET", t.url, nil)
-	chkErr(err)
-	req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", 0, t.file_size))
-	res, err := http.DefaultClient.Do(req)
-	chkErr(err)
-	defer res.Body.Close()
-
-	out_path := GetFilePath(t.dir_path, t.file_name)
-	out, err := os.Create(out_path)
-	chkErr(err)
-	defer out.Close()
-	ch := make(chan int)
-	go ProgressBar(t, &out_path, ch)
-	io.Copy(out, res.Body)
-	<- ch
-}
-
-func chkErr(err error){
+	buffer := bytes.NewBuffer([]byte{})
+	err := graph.Render(chart.PNG, buffer)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("render error")
 	}
+	out, err := os.Create("./data/graph.png")
+	if err != nil {
+		fmt.Println("create file error")
+	}
+	defer out.Close()
+	io.Copy(out, buffer)
 }
