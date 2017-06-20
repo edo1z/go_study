@@ -2,21 +2,24 @@ package main
 
 import (
 	"fmt"
-	"sync"
-	"time"
+	"os"
+	"os/signal"
 )
 
 func main() {
+	go signalTest()
 	fmt.Println("start")
-	var wg sync.WaitGroup
-	for _, a := range []string{"1", "2"} {
-		wg.Add(1)
-		go func(str string) {
-			fmt.Println("I'm " + str)
-			time.Sleep(1 * time.Second)
-			wg.Done()
-		}(a)
+	for {
+		continue
 	}
-	wg.Wait()
-	fmt.Println("end")
+}
+
+func signalTest() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+
+	s := <-c
+	fmt.Println()
+	fmt.Println("got signal: ", s)
+	os.Exit(1)
 }
