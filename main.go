@@ -1,32 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"strings"
+	"gopkg.in/gomail.v2"
 )
 
 func main() {
-	http.HandleFunc("/", sayhello)
-	err := http.ListenAndServe(":9090", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
-}
+	m := gomail.NewMessage()
+	m.SetHeader("From", "from@example.com")
+	m.SetHeader("To", "to@example.com")
+	m.SetHeader("Subject", "日本語")
+	m.SetBody("text/plain", "日本語でこんにちは")
 
-func sayhello(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Fatal(err)
+	d := gomail.Dialer{Host: "localhost", Port: 25}
+	if err := d.DialAndSend(m); err != nil {
+		panic(err)
 	}
-	fmt.Println(r.Form)
-	fmt.Println("path", r.URL.Path)
-	fmt.Println("scheme", r.URL.Scheme)
-	fmt.Println(r.Form["url_long"])
-	for k, v := range r.Form {
-		fmt.Println("key:", k)
-		fmt.Println("val:", strings.Join(v, ""))
-	}
-	fmt.Fprintf(w, "Hello hogehoge!")
 }
