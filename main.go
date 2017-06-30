@@ -1,42 +1,40 @@
 package main
 
 import (
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/context"
-	"github.com/gorilla/sessions"
+	"html/template"
+	"bytes"
 	"fmt"
 )
 
-var store = sessions.NewCookieStore([]byte("hoge"))
-var sess_name = "sess"
+var viewPath = "../../views/"
+var contentType = "text/plain"
+
+type Contact struct {
+	Company	string
+	Name	string
+	Mail	string
+	Content	string
+}
 
 func main() {
-	app := iris.New()
-	app.Get("/", topPage)
-	app.Get("up", upPage)
-	app.Get("cl", clearPage)
-	app.Run(iris.Addr(":8080"))
+	hoge()
+	hoge()
 }
 
-func topPage (ctx context.Context) {
-	f := getFlash(ctx)
-	cnt := fmt.Sprintf(
-		"<h2>count is %d</h2>",
-		getCount(ctx),
-	)
-	html := `<br><a href="/up">Count Up</a>
-	<br><a href="/cl">Count Clear</a>`
-	ctx.HTML(f + cnt + html)
+func hoge() {
+	c := Contact{
+		Company: "会社",
+		Name: "太郎",
+		Mail: "hoge@example.com",
+		Content: "どうしたらいいですか？",
+	}
+	t, err := template.ParseFiles("./mail.tpl", "./welcome.html")
+	if err != nil {
+		fmt.Println(err)
+	}else{
+		buff := &bytes.Buffer{}
+		t.Execute(buff, c)
+		fmt.Println(buff.String())
+	}
 }
 
-func upPage (ctx context.Context) {
-	countUp(ctx)
-	addFlash(ctx, "count up")
-	ctx.Redirect("/")
-}
-
-func clearPage (ctx context.Context) {
-	sessClear(ctx)
-	addFlash(ctx,"session clear")
-	ctx.Redirect("/")
-}
