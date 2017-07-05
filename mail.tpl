@@ -1,5 +1,0 @@
-{{template "head"}}
-
-{{.Name}}
-
-{{.Content}}
